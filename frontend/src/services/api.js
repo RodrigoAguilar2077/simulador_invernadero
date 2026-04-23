@@ -32,7 +32,6 @@ async function request(endpoint, options = {}) {
 
 /**
  * Obtiene la lista de materiales disponibles.
- * @returns {Promise<Array>} Lista de materiales con sus propiedades
  */
 export async function fetchMaterials() {
   return request('/materials')
@@ -40,8 +39,6 @@ export async function fetchMaterials() {
 
 /**
  * Ejecuta una simulación térmica para un solo material.
- * @param {Object} params - Parámetros de simulación
- * @returns {Promise<Object>} Resultados de la simulación
  */
 export async function runSimulation(params) {
   return request('/simulate', {
@@ -52,8 +49,6 @@ export async function runSimulation(params) {
 
 /**
  * Ejecuta simulaciones comparativas de múltiples materiales.
- * @param {Object} params - Parámetros incluyendo material_ids[]
- * @returns {Promise<Object>} Resultados comparativos
  */
 export async function compareSimulation(params) {
   return request('/simulate/compare', {
@@ -64,8 +59,6 @@ export async function compareSimulation(params) {
 
 /**
  * Obtiene el análisis de Laplace para un material.
- * @param {Object} params - material_id, dimensiones
- * @returns {Promise<Object>} Análisis de función de transferencia
  */
 export async function fetchLaplaceAnalysis(params) {
   return request('/laplace', {
@@ -76,10 +69,17 @@ export async function fetchLaplaceAnalysis(params) {
 
 /**
  * Obtiene datos climáticos actuales de OpenWeatherMap.
- * @param {number} lat - Latitud
- * @param {number} lon - Longitud
- * @returns {Promise<Object>} Datos del clima actual
  */
 export async function fetchWeather(lat = 19.2510, lon = -97.8948) {
   return request(`/weather?lat=${lat}&lon=${lon}`)
+}
+
+/**
+ * Busca ciudades usando geocoding de OpenWeatherMap.
+ * @param {string} query - Nombre de la ciudad a buscar
+ * @returns {Promise<Array>} Lista de ciudades con name, country, state, lat, lon
+ */
+export async function searchCities(query) {
+  if (!query || query.trim().length < 2) return []
+  return request(`/geocode?q=${encodeURIComponent(query.trim())}&limit=5`)
 }

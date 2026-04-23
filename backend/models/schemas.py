@@ -58,6 +58,14 @@ class SimulationRequest(BaseModel):
         ge=-10, le=50,
         description="Temperatura máxima para el modelo fallback [°C]",
     )
+    lat: float | None = Field(
+        default=None,
+        description="Latitud de la ubicación (para clima dinámico)",
+    )
+    lon: float | None = Field(
+        default=None,
+        description="Longitud de la ubicación (para clima dinámico)",
+    )
 
 
 class CompareRequest(BaseModel):
@@ -76,6 +84,8 @@ class CompareRequest(BaseModel):
     usar_api_clima: bool = Field(default=True)
     T_min_fallback: float = Field(default=4.0, ge=-20, le=40)
     T_max_fallback: float = Field(default=22.0, ge=-10, le=50)
+    lat: float | None = Field(default=None)
+    lon: float | None = Field(default=None)
 
 
 class LaplaceRequest(BaseModel):

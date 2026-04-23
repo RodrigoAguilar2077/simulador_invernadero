@@ -1,62 +1,84 @@
 <template>
-  <div class="app-container">
-    <!-- Header -->
-    <header class="app-header glass-card--static">
-      <div>
-        <h1 class="app-header__title">🌿 Simulador de Invernadero</h1>
-        <p class="app-header__subtitle">
-          Modelado térmico con Euler Mejorado y análisis de Laplace
-        </p>
+  <div id="app-root">
+    <!-- SIDEBAR NAV -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav__logo">
+        <div class="sidebar-nav__brand">🌿 Simulador de Invernadero</div>
+        <div class="sidebar-nav__slogan">AgroTech: Smart Simulation</div>
       </div>
-      <div class="app-header__badge">
-        <span class="badge-dot"></span>
-        {{ connectionStatus }}
+      <div class="sidebar-nav__links">
+        <a
+          v-for="s in sections" :key="s.id"
+          class="sidebar-nav__link"
+          :class="{ 'sidebar-nav__link--active': activeSection === s.id }"
+          @click="scrollTo(s.id)"
+        >
+          <span class="sidebar-nav__link-icon">{{ s.icon }}</span>
+          {{ s.label }}
+        </a>
       </div>
-    </header>
+      <div class="sidebar-nav__footer">
+        <div class="top-header__badge">
+          <span class="badge-dot"></span>
+          {{ connectionStatus }}
+        </div>
+      </div>
+    </nav>
 
-    <!-- Dashboard -->
-    <main class="dashboard-grid">
-      <!-- Panel Izquierdo: Controles -->
-      <aside class="dashboard-grid__controls glass-card">
-        <MaterialSelector
-          :materials="materials"
-          :selectedMaterials="selectedMaterials"
-          :dimensions="dimensions"
-          :loading="simulating"
-          @toggle-material="toggleMaterial"
-          @simulate="runSimulation"
-        />
-      </aside>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- TOP HEADER -->
+      <header class="top-header">
+        <div class="top-header__left">
+          <WeatherInfo :weather="weatherData" :error="weatherError" compact />
+        </div>
+      </header>
 
-      <!-- Centro: Gráfica Principal -->
-      <section class="dashboard-grid__chart glass-card">
-        <TemperatureChart :simulationData="simulationResult" />
+      <!-- SECTION 1: EL SABER -->
+      <section class="spa-section" id="section-intro">
+        <HeroSection @scroll-to-simulator="scrollTo('section-simulator')" />
       </section>
 
-      <!-- Panel Derecho: Info -->
-      <aside class="dashboard-grid__sidebar">
-        <!-- Termómetro -->
-        <div class="glass-card">
-          <Thermometer
-            :temperature="currentTemp"
-            :label="thermometerLabel"
-          />
-        </div>
+      <!-- SECTION 2: EL CONFIGURADOR + SIMULADOR -->
+      <section class="spa-section" id="section-simulator">
+        <h2 class="section-heading">Simulador Térmico</h2>
+        <div class="simulator-grid">
+          <!-- LEFT: Config Panel -->
+          <aside class="simulator-sidebar">
+            <div class="glass-card sidebar-panel sidebar-panel--overflow">
+              <LocationSearch @city-selected="onCitySelected" />
+            </div>
+            <div class="glass-card sidebar-panel">
+              <MaterialSelector
+                :materials="materials"
+                :selectedMaterials="selectedMaterials"
+                :dimensions="dimensions"
+                :loading="simulating"
+                @toggle-material="toggleMaterial"
+                @simulate="runSimulation"
+              />
+            </div>
+          </aside>
 
-        <!-- Clima Actual -->
-        <div class="glass-card">
-          <WeatherInfo
-            :weather="weatherData"
-            :error="weatherError"
-          />
-        </div>
+          <!-- RIGHT: Results -->
+          <div class="simulator-results">
+            <div class="glass-card">
+              <TemperatureChart :simulationData="simulationResult" />
+            </div>
 
-        <!-- Laplace -->
-        <div class="glass-card">
-          <LaplacePanel :analysis="laplaceData" />
+            <EfficiencyCards
+              :simulationData="simulationResult"
+              :loading="simulating"
+            />
+          </div>
         </div>
-      </aside>
-    </main>
+      </section>
+
+      <!-- SECTION 3: MODO INGENIERO -->
+      <section class="spa-section" id="section-engineer">
+        <EngineerMode :laplaceData="laplaceData" />
+      </section>
+    </div>
 
     <!-- Error Toast -->
     <Transition name="toast">
@@ -70,12 +92,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import HeroSection from './components/HeroSection.vue'
+import LocationSearch from './components/LocationSearch.vue'
 import MaterialSelector from './components/MaterialSelector.vue'
 import TemperatureChart from './components/TemperatureChart.vue'
-import Thermometer from './components/Thermometer.vue'
 import WeatherInfo from './components/WeatherInfo.vue'
-import LaplacePanel from './components/LaplacePanel.vue'
+import EfficiencyCards from './components/EfficiencyCards.vue'
+import EngineerMode from './components/EngineerMode.vue'
 import {
   fetchMaterials,
   compareSimulation,
@@ -96,6 +120,9 @@ const weatherData = ref(null)
 const weatherError = ref('')
 const errorMessage = ref('')
 const connectionStatus = ref('Conectando...')
+const activeSection = ref('section-intro')
+
+const selectedCoords = reactive({ lat: 19.2510, lon: -97.8948 })
 
 const dimensions = reactive({
   largo: 10,
@@ -105,32 +132,57 @@ const dimensions = reactive({
   horas: 24,
 })
 
+const sections = [
+  { id: 'section-intro', icon: '📖', label: 'Introducción' },
+  { id: 'section-simulator', icon: '🔬', label: 'Simulador' },
+  { id: 'section-engineer', icon: '⚙️', label: 'Modo Ingeniero' },
+]
+
 // ============================================================
-// Computed
+// Intersection Observer for active section tracking
 // ============================================================
 
-const currentTemp = computed(() => {
-  if (simulationResult.value?.simulaciones?.length > 0) {
-    const sim = simulationResult.value.simulaciones[0]
-    // Show the last simulated temperature
-    return sim.T_promedio_int
-  }
-  if (weatherData.value) {
-    return weatherData.value.temp
-  }
-  return dimensions.T_inicial
+let observer = null
+
+onMounted(() => {
+  loadInitialData()
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          activeSection.value = entry.target.id
+        }
+      }
+    },
+    { threshold: 0.3 }
+  )
+
+  sections.forEach((s) => {
+    const el = document.getElementById(s.id)
+    if (el) observer.observe(el)
+  })
 })
 
-const thermometerLabel = computed(() => {
-  if (simulationResult.value?.simulaciones?.length > 0) {
-    return 'Prom. Interior'
-  }
-  return weatherData.value ? 'Exterior Actual' : 'Temp. Inicial'
+onUnmounted(() => {
+  if (observer) observer.disconnect()
 })
 
 // ============================================================
 // Methods
 // ============================================================
+
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onCitySelected({ lat, lon }) {
+  selectedCoords.lat = lat
+  selectedCoords.lon = lon
+  // Reload weather for new city
+  loadWeather(lat, lon)
+}
 
 function toggleMaterial(materialId) {
   const idx = selectedMaterials.value.indexOf(materialId)
@@ -143,12 +195,11 @@ function toggleMaterial(materialId) {
 
 async function runSimulation() {
   if (selectedMaterials.value.length === 0) return
-  
+
   simulating.value = true
   errorMessage.value = ''
 
   try {
-    // Run comparative simulation
     const result = await compareSimulation({
       material_ids: selectedMaterials.value,
       T_inicial: dimensions.T_inicial,
@@ -157,10 +208,12 @@ async function runSimulation() {
       ancho: dimensions.ancho,
       alto: dimensions.alto,
       usar_api_clima: true,
+      lat: selectedCoords.lat,
+      lon: selectedCoords.lon,
     })
     simulationResult.value = result
 
-    // Also run Laplace analysis for the first selected material
+    // Also run Laplace analysis for first selected material
     const laplace = await fetchLaplaceAnalysis({
       material_id: selectedMaterials.value[0],
       largo: dimensions.largo,
@@ -176,77 +229,58 @@ async function runSimulation() {
   }
 }
 
+async function loadWeather(lat, lon) {
+  try {
+    const weather = await fetchWeather(lat, lon)
+    weatherData.value = weather
+  } catch (err) {
+    weatherError.value = 'No se pudo obtener el clima'
+    console.warn('Weather error:', err)
+  }
+}
+
 async function loadInitialData() {
   try {
-    // Load materials
     const mats = await fetchMaterials()
     materials.value = mats
     connectionStatus.value = 'API Conectada'
 
-    // Load weather
-    try {
-      const weather = await fetchWeather()
-      weatherData.value = weather
-    } catch (err) {
-      weatherError.value = 'No se pudo obtener el clima'
-      console.warn('Weather error:', err)
-    }
+    await loadWeather(selectedCoords.lat, selectedCoords.lon)
   } catch (err) {
     connectionStatus.value = 'Sin conexión'
     errorMessage.value = 'No se puede conectar con el backend. ¿Está corriendo uvicorn?'
     console.error('Init error:', err)
   }
 }
-
-// ============================================================
-// Lifecycle
-// ============================================================
-
-onMounted(() => {
-  loadInitialData()
-})
 </script>
 
 <style scoped>
-.badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-green-400);
-  animation: pulseGlow 2s infinite;
+.sidebar-panel { padding: var(--space-lg); }
+.sidebar-panel + .sidebar-panel { margin-top: var(--space-md); }
+.sidebar-panel--overflow { overflow: visible; position: relative; z-index: 10; }
+
+.simulator-sidebar {
+  display: flex; flex-direction: column; gap: 0;
+  position: sticky; top: 60px; align-self: start;
+}
+
+.simulator-results {
+  display: flex; flex-direction: column; gap: var(--space-lg);
 }
 
 /* Error Toast */
 .error-toast {
-  position: fixed;
-  bottom: var(--space-lg);
-  left: 50%;
+  position: fixed; bottom: var(--space-lg); left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+  display: flex; align-items: center; gap: var(--space-sm);
   padding: var(--space-md) var(--space-lg);
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.3);
   color: var(--color-red-400);
   font-size: var(--font-size-sm);
-  cursor: pointer;
-  z-index: 1000;
+  cursor: pointer; z-index: 1000;
 }
-
-.toast-close {
-  opacity: 0.5;
-  margin-left: var(--space-sm);
-}
-
-/* Toast transition */
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.3s ease;
-}
-.toast-enter-from,
-.toast-leave-to {
-  opacity: 0;
-  transform: translateX(-50%) translateY(20px);
-}
+.toast-close { opacity: 0.5; margin-left: var(--space-sm); }
+.toast-enter-active, .toast-leave-active { transition: all 0.3s ease; }
+.toast-enter-from, .toast-leave-to { opacity: 0; transform: translateX(-50%) translateY(20px); }
 </style>

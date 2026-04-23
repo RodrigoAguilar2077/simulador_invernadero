@@ -7,6 +7,7 @@ Endpoints:
     POST /api/simulate/compare   → Simulación comparativa de múltiples materiales
     POST /api/laplace            → Análisis de función de transferencia (Laplace)
     GET  /api/weather            → Datos climáticos actuales (OpenWeatherMap)
+    GET  /api/geocode            → Búsqueda de ciudades (geocoding)
 
 Servidor: uvicorn main:app --reload --port 8000
 Docs interactiva: http://localhost:8000/docs
@@ -14,6 +15,8 @@ Docs interactiva: http://localhost:8000/docs
 
 import os
 import logging
+
+import httpx
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -117,7 +120,8 @@ async def simular(req: SimulationRequest):
 
     # Obtener datos climáticos
     T_ext, rad = await _obtener_datos_climaticos(
-        req.usar_api_clima, n_minutos, req.T_min_fallback, req.T_max_fallback
+        req.usar_api_clima, n_minutos, req.T_min_fallback, req.T_max_fallback,
+        lat=req.lat, lon=req.lon,
     )
 
     # Factor alpha ajustado: la radiación que pasa se convierte en calor interior
@@ -166,7 +170,8 @@ async def simular_comparacion(req: CompareRequest):
 
     # Obtener datos climáticos (una sola vez para todos)
     T_ext, rad = await _obtener_datos_climaticos(
-        req.usar_api_clima, n_minutos, req.T_min_fallback, req.T_max_fallback
+        req.usar_api_clima, n_minutos, req.T_min_fallback, req.T_max_fallback,
+        lat=req.lat, lon=req.lon,
     )
 
     simulaciones = []
@@ -257,6 +262,47 @@ async def clima_actual(
         )
 
 
+@app.get("/api/geocode")
+async def buscar_ciudades(q: str = "", limit: int = 5):
+    """
+    Busca ciudades usando la API de geocoding de OpenWeatherMap.
+    Retorna una lista de coincidencias con nombre, país, lat y lon.
+    """
+    if not API_KEY:
+        raise HTTPException(
+            status_code=500,
+            detail="API key de OpenWeatherMap no configurada.",
+        )
+    if not q or len(q.strip()) < 2:
+        return []
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(
+                "http://api.openweathermap.org/geo/1.0/direct",
+                params={"q": q, "limit": limit, "appid": API_KEY},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+
+        results = []
+        for item in data:
+            results.append({
+                "name": item.get("name", ""),
+                "country": item.get("country", ""),
+                "state": item.get("state", ""),
+                "lat": item.get("lat"),
+                "lon": item.get("lon"),
+            })
+        return results
+    except Exception as e:
+        logger.error(f"Error en geocoding: {e}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Error al buscar ciudades: {str(e)}",
+        )
+
+
 # ============================================================
 # Utilidades internas
 # ============================================================
@@ -266,6 +312,8 @@ async def _obtener_datos_climaticos(
     n_minutos: int,
     T_min: float,
     T_max: float,
+    lat: float | None = None,
+    lon: float | None = None,
 ) -> tuple:
     """
     Obtiene datos de temperatura exterior y radiación solar.
@@ -273,10 +321,12 @@ async def _obtener_datos_climaticos(
     """
     T_ext = None
     nubosidad = 0.0
+    use_lat = lat if lat is not None else DEFAULT_LAT
+    use_lon = lon if lon is not None else DEFAULT_LON
 
     if usar_api and API_KEY:
         try:
-            datos_api = await obtener_clima_openweather(DEFAULT_LAT, DEFAULT_LON, API_KEY)
+            datos_api = await obtener_clima_openweather(use_lat, use_lon, API_KEY)
             T_ext_3h = datos_api["temperaturas"]
             nubosidad = datos_api.get("nubosidad", [0])[0] if datos_api.get("nubosidad") else 0
             T_ext_interpolada = interpolar_temperatura(T_ext_3h, n_minutos)
