@@ -46,5 +46,5 @@ Esto nos permite calcular la **Constante de Tiempo ($\tau$)**, que define la ine
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/tu_usuario/simulador_invernadero.git](https://github.com/tu_usuario/simulador_invernadero.git)
+   git clone [https://github.com/RodrigoAguilar2077/simulador_invernadero.git](https://github.com/RodrigoAguilar2077/simulador_invernadero.git)
    cd simulador_invernadero
