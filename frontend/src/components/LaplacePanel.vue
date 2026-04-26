@@ -28,7 +28,7 @@
       <div class="laplace-stats">
         <div class="stat-row">
           <span class="stat-label">Constante τ</span>
-          <span class="stat-value stat-value--green">
+          <span class="stat-value stat-value--purple">
             {{ analysis.tau_minutos }} min
           </span>
         </div>
@@ -107,8 +107,8 @@ const stepChartData = computed(() => {
     datasets: [
       {
         data: y.filter((_, i) => i % step === 0),
-        borderColor: '#4ade80',
-        backgroundColor: 'rgba(74, 222, 128, 0.08)',
+        borderColor: '#c084fc',
+        backgroundColor: 'rgba(192, 132, 252, 0.08)',
         borderWidth: 2,
         pointRadius: 0,
         tension: 0.4,
@@ -199,7 +199,7 @@ const stepChartOptions = {
 .tf-equation {
   font-size: var(--font-size-lg);
   font-weight: 600;
-  color: var(--color-green-300);
+  color: var(--color-purple-300);
   font-family: 'Courier New', monospace;
 }
 
@@ -213,9 +213,9 @@ const stepChartOptions = {
   color: var(--color-text-secondary);
   line-height: 1.6;
   padding: var(--space-sm);
-  background: rgba(74, 222, 128, 0.04);
+  background: rgba(192, 132, 252, 0.04);
   border-radius: var(--radius-sm);
-  border-left: 2px solid var(--color-green-500);
+  border-left: 2px solid var(--color-purple-500);
 }
 
 .step-chart-wrapper {

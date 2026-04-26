@@ -90,7 +90,7 @@ function selectCity(city) {
   font-family: var(--font-family); font-size: var(--font-size-sm);
   outline: none; transition: border-color var(--transition-base);
 }
-.search-input:focus { border-color: var(--color-green-400); }
+.search-input:focus { border-color: var(--color-purple-400); }
 .search-input::placeholder { color: var(--color-text-muted); }
 .search-icon {
   position: absolute; right: var(--space-sm); top: 50%; transform: translateY(-50%);
@@ -108,16 +108,16 @@ function selectCity(city) {
   transition: background var(--transition-fast);
   font-size: var(--font-size-sm);
 }
-.search-result-item:hover { background: rgba(74,222,128,0.08); }
+.search-result-item:hover { background: rgba(192,132,252,0.08); }
 .search-result-name { color: var(--color-text-primary); font-weight: 500; }
 .search-result-meta { color: var(--color-text-muted); font-size: var(--font-size-xs); }
 .selected-city {
   display: flex; align-items: center; gap: var(--space-xs);
-  padding: var(--space-sm); background: rgba(74,222,128,0.06);
-  border: 1px solid rgba(74,222,128,0.15); border-radius: var(--radius-sm);
+  padding: var(--space-sm); background: rgba(192,132,252,0.06);
+  border: 1px solid rgba(192,132,252,0.15); border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
 }
-.selected-city__name { color: var(--color-green-400); font-weight: 600; }
+.selected-city__name { color: var(--color-purple-400); font-weight: 600; }
 .selected-city__country { color: var(--color-text-muted); }
 .selected-city__coords { margin-left: auto; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
 </style>

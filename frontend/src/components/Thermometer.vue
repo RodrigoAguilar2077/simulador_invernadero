@@ -109,7 +109,7 @@ const scaleMarks = computed(() => {
 })
 
 const coldColor = '#3b82f6'
-const midColor = '#22c55e'
+const midColor = '#a855f7'
 const hotColor = '#ef4444'
 const tempGradientUrl = computed(() => `url(#${gradientId.value})`)
 

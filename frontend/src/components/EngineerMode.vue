@@ -34,7 +34,7 @@
           </div>
 
           <div class="engineer-mode__card glass-card">
-            <div class="engineer-mode__card-badge engineer-mode__card-badge--green">Euler Mejorado (Heun)</div>
+            <div class="engineer-mode__card-badge engineer-mode__card-badge--purple">Euler Mejorado (Heun)</div>
             <h4 class="engineer-mode__card-title">Resolución Numérica</h4>
             <p class="engineer-mode__card-text">
               Tomamos los datos climáticos reales de la ciudad elegida y resolvemos
@@ -67,7 +67,7 @@
             <div class="engineer-mode__results-col">
               <div class="stat-row">
                 <span class="stat-label">Constante τ</span>
-                <span class="stat-value stat-value--green">{{ laplaceData.tau_minutos }} min</span>
+                <span class="stat-value stat-value--purple">{{ laplaceData.tau_minutos }} min</span>
               </div>
               <div class="stat-row">
                 <span class="stat-label">τ en horas</span>
@@ -135,7 +135,7 @@ const stepChartData = computed(() => {
     labels: t.filter((_, i) => i % step === 0).map(v => v.toFixed(0)),
     datasets: [{
       data: y.filter((_, i) => i % step === 0),
-      borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)',
+      borderColor: '#c084fc', backgroundColor: 'rgba(192,132,252,0.08)',
       borderWidth: 2, pointRadius: 0, tension: 0.4, fill: true,
     }],
   }
@@ -177,27 +177,27 @@ const stepChartOptions = {
   letter-spacing: 0.05em; margin-bottom: var(--space-sm);
 }
 .engineer-mode__card-badge--amber { background: rgba(251,191,36,0.12); color: var(--color-amber-400); }
-.engineer-mode__card-badge--green { background: rgba(74,222,128,0.12); color: var(--color-green-400); }
+.engineer-mode__card-badge--purple { background: rgba(192,132,252,0.12); color: var(--color-purple-400); }
 .engineer-mode__card-title { font-size: var(--font-size-base); font-weight: 700; margin-bottom: var(--space-sm); }
 .engineer-mode__card-text { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-md); }
 .engineer-mode__equation {
   padding: var(--space-md); background: rgba(0,0,0,0.3);
   border-radius: var(--radius-sm); margin-bottom: var(--space-md); text-align: center;
 }
-.eq-line { font-family: 'Courier New', monospace; font-size: var(--font-size-lg); color: var(--color-green-300); font-weight: 600; word-break: break-word; }
+.eq-line { font-family: 'Courier New', monospace; font-size: var(--font-size-lg); color: var(--color-purple-300); font-weight: 600; word-break: break-word; }
 .eq-desc { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-xs); }
 .engineer-mode__list {
   list-style: none; display: flex; flex-direction: column; gap: var(--space-xs);
   font-size: var(--font-size-sm); color: var(--color-text-secondary);
 }
-.engineer-mode__list li::before { content: '→ '; color: var(--color-green-400); }
+.engineer-mode__list li::before { content: '→ '; color: var(--color-purple-400); }
 .text-red { color: var(--color-red-400); font-weight: 600; }
 .text-blue { color: var(--color-blue-400); font-weight: 600; }
 .engineer-mode__steps { display: flex; flex-direction: column; gap: var(--space-sm); }
 .step { display: flex; align-items: center; gap: var(--space-sm); }
 .step__num {
   width: 24px; height: 24px; border-radius: 50%;
-  background: rgba(74,222,128,0.15); color: var(--color-green-400);
+  background: rgba(192,132,252,0.15); color: var(--color-purple-400);
   font-size: var(--font-size-xs); font-weight: 700;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
@@ -207,8 +207,8 @@ const stepChartOptions = {
 .engineer-mode__results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
 .engineer-mode__desc {
   margin-top: var(--space-md); padding: var(--space-sm);
-  background: rgba(74,222,128,0.04); border-radius: var(--radius-sm);
-  border-left: 2px solid var(--color-green-500);
+  background: rgba(192,132,252,0.04); border-radius: var(--radius-sm);
+  border-left: 2px solid var(--color-purple-500);
   font-size: var(--font-size-xs); color: var(--color-text-secondary); line-height: 1.6;
 }
 .engineer-mode__step-chart { margin-top: var(--space-md); }

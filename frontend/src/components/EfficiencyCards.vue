@@ -36,7 +36,7 @@
           </div>
           <div class="stat-row">
             <span class="stat-label">T. Promedio</span>
-            <span class="stat-value stat-value--green">{{ sim.T_promedio_int }}°C</span>
+            <span class="stat-value stat-value--purple">{{ sim.T_promedio_int }}°C</span>
           </div>
           <div class="stat-row">
             <span class="stat-label">ΔT (max-min)</span>
@@ -82,7 +82,7 @@ function retentionPercent(sim) {
 
 function retentionColor(sim) {
   const pct = retentionPercent(sim)
-  if (pct >= 70) return 'var(--color-green-400)'
+  if (pct >= 70) return 'var(--color-purple-400)'
   if (pct >= 45) return 'var(--color-amber-400)'
   return 'var(--color-red-400)'
 }

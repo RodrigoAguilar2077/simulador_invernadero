@@ -53,7 +53,7 @@
           </div>
           <div class="stat-row">
             <span class="stat-label">T. Promedio</span>
-            <span class="stat-value stat-value--green">{{ sim.T_promedio_int }}°C</span>
+            <span class="stat-value stat-value--purple">{{ sim.T_promedio_int }}°C</span>
           </div>
         </div>
       </div>

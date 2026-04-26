@@ -38,7 +38,7 @@
       <h3 class="hero__math-title">El Rol de la Matemática</h3>
       <div class="hero__math-grid">
         <div class="hero__math-item">
-          <div class="hero__math-badge hero__math-badge--green">Euler Mejorado</div>
+          <div class="hero__math-badge hero__math-badge--purple">Euler Mejorado</div>
           <p class="hero__math-desc"><strong>El Reloj de Precisión.</strong> Resuelve la ecuación diferencial de calor minuto a minuto para predecir la temperatura interior.</p>
           <code class="hero__math-eq">T(t+1) = T(t) + (h/2)[f(t) + f(t+1, T̃)]</code>
         </div>
@@ -67,7 +67,7 @@ defineEmits(['scroll-to-simulator'])
 .hero { text-align: center; max-width: 960px; margin: 0 auto; }
 .hero__title {
   font-size: var(--font-size-3xl); font-weight: 800;
-  background: linear-gradient(135deg, var(--color-green-300), var(--color-green-500), var(--color-amber-400));
+  background: linear-gradient(135deg, var(--color-purple-300), var(--color-purple-500), var(--color-amber-400));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text; margin-bottom: var(--space-md);
 }
@@ -79,7 +79,7 @@ defineEmits(['scroll-to-simulator'])
 .hero__card { flex: 1; padding: var(--space-xl) var(--space-lg); text-align: center; }
 .hero__card-icon {
   width: 56px; height: 56px; border-radius: var(--radius-md);
-  background: rgba(74,222,128,0.1); color: var(--color-green-400);
+  background: rgba(192,132,252,0.1); color: var(--color-purple-400);
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto var(--space-md);
 }
@@ -100,14 +100,14 @@ defineEmits(['scroll-to-simulator'])
   font-size: var(--font-size-xs); font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.05em; margin-bottom: var(--space-sm);
 }
-.hero__math-badge--green { background: rgba(74,222,128,0.12); color: var(--color-green-400); }
+.hero__math-badge--purple { background: rgba(192,132,252,0.12); color: var(--color-purple-400); }
 .hero__math-badge--amber { background: rgba(251,191,36,0.12); color: var(--color-amber-400); }
 .hero__math-desc { font-size: var(--font-size-sm); color: var(--color-text-secondary); line-height: 1.6; margin-bottom: var(--space-sm); }
 .hero__math-eq {
   display: block; padding: var(--space-sm) var(--space-md);
   background: rgba(0,0,0,0.3); border-radius: var(--radius-sm);
   font-family: 'Courier New', monospace; font-size: var(--font-size-sm);
-  color: var(--color-green-300);
+  color: var(--color-purple-300);
 }
 .hero__cta { padding: var(--space-md) var(--space-2xl); font-size: var(--font-size-base); }
 
