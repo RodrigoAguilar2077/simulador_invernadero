@@ -32,7 +32,7 @@
       </p>
     </div>
 
-    <!-- Stats Row -->
+
     <div class="chart-stats" v-if="hasData">
       <div
         class="chart-stat-card glass-card--static"

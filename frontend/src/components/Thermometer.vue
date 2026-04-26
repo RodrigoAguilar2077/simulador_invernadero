@@ -6,7 +6,7 @@
     </h3>
     <div class="thermometer-body pulse-glow">
       <svg viewBox="0 0 80 220" class="thermometer-svg">
-        <!-- Bulbo inferior -->
+
         <circle
           cx="40" cy="190"
           r="22"
@@ -14,7 +14,7 @@
           stroke="rgba(148, 163, 184, 0.2)"
           stroke-width="1.5"
         />
-        <!-- Tubo -->
+
         <rect
           x="30" y="20"
           width="20" height="170"
@@ -23,7 +23,7 @@
           stroke="rgba(148, 163, 184, 0.2)"
           stroke-width="1.5"
         />
-        <!-- Nivel de mercurio (animado) -->
+
         <rect
           x="33" :y="mercuryY"
           width="14"
@@ -32,7 +32,7 @@
           :fill="tempGradientUrl"
           class="mercury-bar"
         />
-        <!-- Marcas de escala -->
+
         <g v-for="mark in scaleMarks" :key="mark.temp">
           <line
             :x1="52" :y1="mark.y"
@@ -47,7 +47,7 @@
             font-family="Inter"
           >{{ mark.temp }}°</text>
         </g>
-        <!-- Gradientes -->
+
         <defs>
           <linearGradient :id="gradientId" x1="0" y1="1" x2="0" y2="0">
             <stop offset="0%" :stop-color="coldColor" />

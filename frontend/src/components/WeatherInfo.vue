@@ -1,7 +1,7 @@
 <template>
   <div class="weather-info" :class="{ 'weather-info--compact': compact }">
     <template v-if="compact">
-      <!-- Compact mode for header -->
+
       <div v-if="weather" class="weather-compact">
         <img
           :src="`https://openweathermap.org/img/wn/${weather.icono}.png`"
@@ -22,7 +22,7 @@
     </template>
 
     <template v-else>
-      <!-- Full mode -->
+
       <h3 class="section-title">
         <span class="section-title__icon"><CloudSun size="24" /></span>
         Clima Actual

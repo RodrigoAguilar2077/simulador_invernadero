@@ -5,7 +5,6 @@
       Eficiencia Energética
     </h3>
 
-    <!-- Skeleton Loading -->
     <div v-if="loading" class="efficiency-grid">
       <div v-for="i in 3" :key="i" class="efficiency-skeleton glass-card--static">
         <div class="skeleton" style="height:16px;width:60%;margin-bottom:12px"></div>
@@ -14,7 +13,6 @@
       </div>
     </div>
 
-    <!-- Results -->
     <div v-else-if="simulationData && simulationData.simulaciones" class="efficiency-grid">
       <div
         v-for="(sim, idx) in simulationData.simulaciones"
@@ -78,7 +76,6 @@ const props = defineProps({
 
 function retentionPercent(sim) {
   const delta = sim.T_max_int - sim.T_min_int
-  // Lower delta = better retention. Scale: 0°C delta = 100%, 30°C+ delta = 10%
   const pct = Math.max(10, Math.min(100, 100 - (delta / 30) * 90))
   return Math.round(pct)
 }

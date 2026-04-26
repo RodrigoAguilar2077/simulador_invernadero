@@ -6,7 +6,7 @@
     </h3>
 
     <div v-if="analysis" class="laplace-content fade-in">
-      <!-- Clasificación Badge -->
+
       <div class="laplace-classification">
         <span
           class="badge"
@@ -16,7 +16,7 @@
         </span>
       </div>
 
-      <!-- Función de transferencia -->
+
       <div class="transfer-function">
         <div class="tf-label">Función de Transferencia</div>
         <div class="tf-equation">
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <!-- Métricas -->
+
       <div class="laplace-stats">
         <div class="stat-row">
           <span class="stat-label">Constante τ</span>
@@ -54,12 +54,12 @@
         </div>
       </div>
 
-      <!-- Descripción verbal -->
+
       <div class="laplace-description">
         <p>{{ analysis.descripcion }}</p>
       </div>
 
-      <!-- Mini gráfica de respuesta al escalón -->
+
       <div class="step-response-chart" v-if="analysis.step_response_t">
         <div class="tf-label" style="margin-bottom: 8px;">Respuesta al Escalón</div>
         <div class="step-chart-wrapper">

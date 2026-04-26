@@ -19,25 +19,6 @@ async def obtener_clima_openweather(
 ) -> dict:
     """
     Obtiene el pronóstico del clima desde OpenWeatherMap
-    
-    Endpoint: https://api.openweathermap.org/data/2.5/forecast
-    
-    Args:
-        lat: Latitud en grados decimales
-        lon: Longitud en grados decimales
-        api_key: API key de OpenWeatherMap
-    
-    Returns:
-        Diccionario con:
-            - temperaturas: Lista de temperaturas [°C] cada 3 horas
-            - timestamps: Lista de timestamps Unix
-            - humedad: Lista de humedad relativa [%]
-            - nubosidad: Lista de cobertura de nubes [%]
-            - descripcion: Descripción del clima actual
-            - ciudad: Nombre de la ciudad detectada
-    
-    Raises:
-        httpx.HTTPError: Si la llamada a la API falla
     """
     url = "https://api.openweathermap.org/data/2.5/forecast"
     params = {
@@ -81,15 +62,7 @@ async def obtener_clima_openweather(
 
 async def obtener_clima_actual(lat: float, lon: float, api_key: str) -> dict:
     """
-    Obtiene el clima actual desde OpenWeatherMap (Current Weather endpoint).
-    
-    Args:
-        lat: Latitud en grados decimales
-        lon: Longitud en grados decimales
-        api_key: API key de OpenWeatherMap
-    
-    Returns:
-        Diccionario con datos del clima actual
+    Obtiene el clima actual desde OpenWeatherMap
     """
     url = "https://api.openweathermap.org/data/2.5/weather"
     params = {
@@ -130,14 +103,7 @@ def interpolar_temperatura(
 ) -> np.ndarray:
     """
     Interpola temperaturas de intervalos de 3 horas a intervalos de 1 minuto
-    usando Spline Cúbica para una curva suave y natural.
-    
-    Args:
-        temperaturas_3h: Lista de temperaturas cada 3 horas [°C]
-        n_minutos: Número total de minutos a generar (default: 1440 = 24h)
-    
-    Returns:
-        Array NumPy de temperaturas interpoladas, un valor por minuto [°C]
+    usando Spline Cúbica.
     """
     n_puntos = len(temperaturas_3h)
     # Puntos originales en minutos 
@@ -260,19 +226,7 @@ def generar_datos_simulacion(
     R_max: float = 850.0,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    Genera los arrays de temperatura exterior y radiación solar
-    listos para la simulación.
-    
-    Args:
-        temperaturas_ext: Array de T_ext ya interpoladas (si viene de API)
-        usar_fallback: Si True, usa el modelo sinusoidal local
-        n_minutos: Duración de la simulación en minutos
-        T_min, T_max: Temperaturas para el modelo fallback
-        nubosidad: Porcentaje de nubosidad
-        R_max: Radiación solar máxima
-    
-    Returns:
-        Tupla (T_ext_array, rad_array), ambos de tamaño n_minutos
+    Genera los arrays de temperatura exterior y radiación solar listos para la simulación
     """
     if temperaturas_ext is not None and not usar_fallback:
         T_ext = temperaturas_ext[:n_minutos]

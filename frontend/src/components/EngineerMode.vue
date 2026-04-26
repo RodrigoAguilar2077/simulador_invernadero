@@ -14,7 +14,6 @@
     <Transition name="expand">
       <div v-if="active" class="engineer-mode__content fade-in">
         <div class="engineer-mode__grid">
-          <!-- Laplace -->
           <div class="engineer-mode__card glass-card">
             <div class="engineer-mode__card-badge engineer-mode__card-badge--amber">Transformada de Laplace</div>
             <h4 class="engineer-mode__card-title">Análisis de Estabilidad</h4>
@@ -34,7 +33,6 @@
             </ul>
           </div>
 
-          <!-- Euler -->
           <div class="engineer-mode__card glass-card">
             <div class="engineer-mode__card-badge engineer-mode__card-badge--green">Euler Mejorado (Heun)</div>
             <h4 class="engineer-mode__card-title">Resolución Numérica</h4>
@@ -63,7 +61,6 @@
           </div>
         </div>
 
-        <!-- Laplace Analysis Results -->
         <div v-if="laplaceData" class="engineer-mode__results glass-card fade-in">
           <h4 class="engineer-mode__results-title">📊 Resultados del Análisis — {{ laplaceData.material_nombre }}</h4>
           <div class="engineer-mode__results-grid">

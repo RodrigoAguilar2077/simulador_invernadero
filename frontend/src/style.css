@@ -90,7 +90,7 @@ body {
   min-height: 100vh;
 }
 
-/* SIDEBAR NAV  */
+/* SIDEBAR NAV */
 .sidebar-nav {
   position: fixed;
   top: 0;
@@ -172,7 +172,7 @@ body {
   color: var(--color-text-muted);
 }
 
-/*  MAIN CONTENT  */
+/* MAIN CONTENT */
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
@@ -182,7 +182,7 @@ body {
   min-width: 0;
 }
 
-/*  TOP HEADER  */
+/* TOP HEADER */
 .top-header {
   position: sticky;
   top: 0;
@@ -223,7 +223,7 @@ body {
   animation: pulseGlow 2s infinite;
 }
 
-/*  SECTIONS  */
+/* SECTIONS */
 .spa-section {
   padding: var(--space-2xl) var(--space-xl);
   border-bottom: 1px solid rgba(148, 163, 184, 0.06);
@@ -233,7 +233,7 @@ body {
   border-bottom: none;
 }
 
-/*  GLASS CARD  */
+/* GLASS CARD */
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
@@ -256,7 +256,7 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-/*  SIMULATOR GRID  */
+/* SIMULATOR GRID */
 .simulator-grid {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -264,7 +264,7 @@ body {
   min-width: 0;
 }
 
-/*  BUTTONS  */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -305,7 +305,7 @@ body {
   width: 100%;
 }
 
-/*  FORMS  */
+/* FORMS */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -363,7 +363,7 @@ body {
   cursor: pointer;
 }
 
-/*  MATERIAL CARDS  */
+/* MATERIAL CARDS */
 .material-card {
   display: flex;
   align-items: center;
@@ -431,7 +431,7 @@ body {
   color: var(--color-text-muted);
 }
 
-/*  STATS  */
+/* STATS */
 .stat-row {
   display: flex;
   justify-content: space-between;
@@ -471,7 +471,7 @@ body {
   color: var(--color-red-400);
 }
 
-/*  BADGES  */
+/* BADGES */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -502,7 +502,7 @@ body {
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
-/*  SECTION TITLES  */
+/* SECTION TITLES */
 .section-title {
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -530,7 +530,7 @@ body {
   margin-bottom: var(--space-md);
 }
 
-/*  SPINNER & ANIMATIONS  */
+/* SPINNER & ANIMATIONS */
 .spinner {
   width: 20px;
   height: 20px;
@@ -610,7 +610,7 @@ body {
   animation: gentleBounce 4s ease-in-out infinite;
 }
 
-/*  SKELETON  */
+/* SKELETON */
 .skeleton {
   background: linear-gradient(90deg, var(--color-bg-surface) 25%, var(--color-bg-elevated) 50%, var(--color-bg-surface) 75%);
   background-size: 200% 100%;
@@ -628,7 +628,7 @@ body {
   }
 }
 
-/*  TOGGLE SWITCH  */
+/* TOGGLE SWITCH */
 .toggle-switch {
   position: relative;
   width: 44px;
@@ -661,7 +661,7 @@ body {
   transform: translateX(20px);
 }
 
-/*  SCROLLBAR  */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -680,7 +680,7 @@ body {
   background: rgba(148, 163, 184, 0.3);
 }
 
-/*  RESPONSIVE  */
+/* RESPONSIVE */
 @media (max-width: 1024px) {
   .sidebar-nav {
     width: 220px;
