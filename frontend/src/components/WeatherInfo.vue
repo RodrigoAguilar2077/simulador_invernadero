@@ -9,7 +9,7 @@
           width="32" height="32" class="weather-compact__icon"
         />
         <span class="weather-compact__temp">{{ weather.temp.toFixed(1) }}°C</span>
-        <span class="weather-compact__city">📍 {{ weather.ciudad }}</span>
+        <span class="weather-compact__city"><MapPin size="12" style="display:inline; margin-right:2px"/>{{ weather.ciudad }}</span>
         <span class="weather-compact__desc">{{ weather.descripcion }}</span>
       </div>
       <div v-else-if="error" class="weather-compact weather-compact--error">
@@ -24,7 +24,7 @@
     <template v-else>
       <!-- Full mode -->
       <h3 class="section-title">
-        <span class="section-title__icon">🌤️</span>
+        <span class="section-title__icon"><CloudSun size="24" /></span>
         Clima Actual
       </h3>
 
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="weather-description">{{ weather.descripcion }}</div>
-        <div class="weather-city">📍 {{ weather.ciudad }}</div>
+        <div class="weather-city"><MapPin size="14" style="display:inline; margin-right:2px"/>{{ weather.ciudad }}</div>
         <div class="weather-details">
           <div class="stat-row">
             <span class="stat-label">Sensación</span>
@@ -77,6 +77,8 @@
 </template>
 
 <script setup>
+import { MapPin, CloudSun } from 'lucide-vue-next'
+
 defineProps({
   weather: { type: Object, default: null },
   error: { type: String, default: '' },

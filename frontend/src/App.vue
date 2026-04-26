@@ -1,7 +1,7 @@
 <template>
-  <div id="app-root">
+  <div id="app-root" :style="appStyle">
     <!-- SIDEBAR NAV -->
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" :class="{ 'open': sidebarOpen }">
       <div class="sidebar-nav__logo">
         <div class="sidebar-nav__brand">🌿 Simulador de Invernadero</div>
         <div class="sidebar-nav__slogan">AgroTech: Smart Simulation</div>
@@ -30,6 +30,9 @@
       <!-- TOP HEADER -->
       <header class="top-header">
         <div class="top-header__left">
+          <button class="hamburger-btn" @click="toggleSidebar">
+            <MenuIcon class="hamburger-icon" />
+          </button>
           <WeatherInfo :weather="weatherData" :error="weatherError" compact />
         </div>
       </header>
@@ -100,6 +103,7 @@ import TemperatureChart from './components/TemperatureChart.vue'
 import WeatherInfo from './components/WeatherInfo.vue'
 import EfficiencyCards from './components/EfficiencyCards.vue'
 import EngineerMode from './components/EngineerMode.vue'
+import { Menu as MenuIcon } from 'lucide-vue-next'
 import {
   fetchMaterials,
   compareSimulation,
@@ -107,9 +111,9 @@ import {
   fetchWeather,
 } from './services/api.js'
 
-// ============================================================
+
 // State
-// ============================================================
+
 
 const materials = ref([])
 const selectedMaterials = ref([])
@@ -121,6 +125,28 @@ const weatherError = ref('')
 const errorMessage = ref('')
 const connectionStatus = ref('Conectando...')
 const activeSection = ref('section-intro')
+const sidebarOpen = ref(false)
+
+const appStyle = computed(() => {
+  const baseTemp = weatherData.value ? weatherData.value.temp : 20;
+  
+  const minT = 0;
+  const maxT = 40;
+  let factor = (baseTemp - minT) / (maxT - minT);
+  factor = Math.max(0, Math.min(1, factor));
+
+  // Adjusted for dark mode: deeper colors that blend well
+  const colorFrio = {r: 59, g: 130, b: 246}; // Blue
+  const colorCalor = {r: 251, g: 146, b: 60}; // Orange
+
+  const r = Math.round(colorFrio.r + (colorCalor.r - colorFrio.r) * factor);
+  const g = Math.round(colorFrio.g + (colorCalor.g - colorFrio.g) * factor);
+  const b = Math.round(colorFrio.b + (colorCalor.b - colorFrio.b) * factor);
+
+  return {
+    background: `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, 0.15) 0%, var(--color-bg-deep) 40%)`
+  }
+})
 
 const selectedCoords = reactive({ lat: 19.2510, lon: -97.8948 })
 
@@ -138,9 +164,9 @@ const sections = [
   { id: 'section-engineer', icon: '⚙️', label: 'Modo Ingeniero' },
 ]
 
-// ============================================================
+
 // Intersection Observer for active section tracking
-// ============================================================
+
 
 let observer = null
 
@@ -168,19 +194,24 @@ onUnmounted(() => {
   if (observer) observer.disconnect()
 })
 
-// ============================================================
+
 // Methods
-// ============================================================
+
 
 function scrollTo(id) {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  sidebarOpen.value = false // Close sidebar on mobile after clicking
+}
+
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value
 }
 
 function onCitySelected({ lat, lon }) {
   selectedCoords.lat = lat
   selectedCoords.lon = lon
-  // Reload weather for new city
+
   loadWeather(lat, lon)
 }
 
@@ -266,6 +297,7 @@ async function loadInitialData() {
 
 .simulator-results {
   display: flex; flex-direction: column; gap: var(--space-lg);
+  min-width: 0;
 }
 
 /* Error Toast */
@@ -283,4 +315,39 @@ async function loadInitialData() {
 .toast-close { opacity: 0.5; margin-left: var(--space-sm); }
 .toast-enter-active, .toast-leave-active { transition: all 0.3s ease; }
 .toast-enter-from, .toast-leave-to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+
+/* Hamburger Button */
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.hamburger-icon {
+  width: 24px;
+  height: 24px;
+}
+
+#app-root {
+  min-height: 100vh;
+  transition: background 1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .simulator-sidebar {
+    position: static;
+  }
+}
 </style>

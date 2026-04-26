@@ -187,7 +187,7 @@ const stepChartOptions = {
   padding: var(--space-md); background: rgba(0,0,0,0.3);
   border-radius: var(--radius-sm); margin-bottom: var(--space-md); text-align: center;
 }
-.eq-line { font-family: 'Courier New', monospace; font-size: var(--font-size-lg); color: var(--color-green-300); font-weight: 600; }
+.eq-line { font-family: 'Courier New', monospace; font-size: var(--font-size-lg); color: var(--color-green-300); font-weight: 600; word-break: break-word; }
 .eq-desc { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-xs); }
 .engineer-mode__list {
   list-style: none; display: flex; flex-direction: column; gap: var(--space-xs);
@@ -216,7 +216,7 @@ const stepChartOptions = {
 }
 .engineer-mode__step-chart { margin-top: var(--space-md); }
 .tf-label { font-size: var(--font-size-xs); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-xs); }
-.step-chart-wrap { height: 140px; position: relative; }
+.step-chart-wrap { height: 140px; position: relative; width: 100%; min-width: 0; }
 .expand-enter-active, .expand-leave-active { transition: all 0.4s ease; }
 .expand-enter-from, .expand-leave-to { opacity: 0; transform: translateY(-10px); }
 

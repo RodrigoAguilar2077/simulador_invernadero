@@ -11,9 +11,7 @@
     <div class="hero__cards">
       <div class="hero__card glass-card fade-in-up" style="animation-delay: 0.1s">
         <div class="hero__card-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-          </svg>
+          <Droplets size="32" stroke-width="1.5" />
         </div>
         <h3 class="hero__card-title">Ahorro de Agua</h3>
         <p class="hero__card-text">Hasta 50% menos consumo hídrico gracias al microclima controlado y la reducción de evapotranspiración.</p>
@@ -21,9 +19,7 @@
 
       <div class="hero__card glass-card fade-in-up" style="animation-delay: 0.25s">
         <div class="hero__card-icon hero__card-icon--amber">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
+          <ThermometerSnowflake size="32" stroke-width="1.5" />
         </div>
         <h3 class="hero__card-title">Protección contra Heladas</h3>
         <p class="hero__card-text">Aísla los cultivos de temperaturas extremas. La cubierta actúa como barrera térmica contra el frío nocturno.</p>
@@ -31,9 +27,7 @@
 
       <div class="hero__card glass-card fade-in-up" style="animation-delay: 0.4s">
         <div class="hero__card-icon hero__card-icon--blue">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-          </svg>
+          <TrendingUp size="32" stroke-width="1.5" />
         </div>
         <h3 class="hero__card-title">Aumento de Rendimiento</h3>
         <p class="hero__card-text">2-3× más producción por m² al extender ciclos de cultivo y controlar variables ambientales.</p>
@@ -64,6 +58,8 @@
 </template>
 
 <script setup>
+import { Droplets, ThermometerSnowflake, TrendingUp } from 'lucide-vue-next'
+
 defineEmits(['scroll-to-simulator'])
 </script>
 
@@ -79,8 +75,8 @@ defineEmits(['scroll-to-simulator'])
   font-size: var(--font-size-base); color: var(--color-text-secondary);
   max-width: 640px; margin: 0 auto var(--space-xl); line-height: 1.7;
 }
-.hero__cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); margin-bottom: var(--space-xl); }
-.hero__card { padding: var(--space-xl) var(--space-lg); text-align: center; }
+.hero__cards { display: flex; flex-direction: row; gap: var(--space-lg); margin-bottom: var(--space-xl); }
+.hero__card { flex: 1; padding: var(--space-xl) var(--space-lg); text-align: center; }
 .hero__card-icon {
   width: 56px; height: 56px; border-radius: var(--radius-md);
   background: rgba(74,222,128,0.1); color: var(--color-green-400);
@@ -116,7 +112,7 @@ defineEmits(['scroll-to-simulator'])
 .hero__cta { padding: var(--space-md) var(--space-2xl); font-size: var(--font-size-base); }
 
 @media (max-width: 768px) {
-  .hero__cards { grid-template-columns: 1fr; }
+  .hero__cards { flex-direction: column; }
   .hero__math-grid { grid-template-columns: 1fr; }
   .hero__math-divider { display: none; }
   .hero__title { font-size: var(--font-size-2xl); }

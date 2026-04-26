@@ -1,16 +1,12 @@
 """
-Modelos Pydantic para validación de requests y responses de la API.
+Modelos Pydantic para validación de requests y responses de la API
 
-Define las estructuras de datos que viajan entre el frontend y el backend,
-con validación automática de tipos y rangos.
 """
 
 from pydantic import BaseModel, Field
 
 
-# ============================================================
 # Request Models
-# ============================================================
 
 class SimulationRequest(BaseModel):
     """Parámetros para ejecutar una simulación térmica."""
@@ -69,7 +65,7 @@ class SimulationRequest(BaseModel):
 
 
 class CompareRequest(BaseModel):
-    """Parámetros para simulación comparativa de múltiples materiales."""
+    """Parámetros para simulación comparativa de múltiples materiales"""
     material_ids: list[str] = Field(
         ...,
         min_length=1,
@@ -89,7 +85,7 @@ class CompareRequest(BaseModel):
 
 
 class LaplaceRequest(BaseModel):
-    """Parámetros para el análisis de Laplace."""
+    """Parámetros para el análisis de Laplace"""
     material_id: str = Field(
         ...,
         description="ID del material a analizar",
@@ -99,12 +95,10 @@ class LaplaceRequest(BaseModel):
     alto: float = Field(default=3.0, gt=0, le=15)
 
 
-# ============================================================
 # Response Models
-# ============================================================
 
 class MaterialInfo(BaseModel):
-    """Información de un material para el frontend."""
+    """Información de un material para el frontend"""
     id: str
     nombre: str
     descripcion: str
@@ -121,7 +115,7 @@ class MaterialInfo(BaseModel):
 
 
 class SimulationResponse(BaseModel):
-    """Resultados de una simulación térmica."""
+    """Resultados de una simulación térmica"""
     material_id: str
     material_nombre: str
     color: str
@@ -136,7 +130,7 @@ class SimulationResponse(BaseModel):
 
 
 class CompareResponse(BaseModel):
-    """Resultados de simulación comparativa."""
+    """Resultados de simulación comparativa"""
     simulaciones: list[SimulationResponse]
     tiempo_horas: list[float]
     T_exterior: list[float]
@@ -144,7 +138,7 @@ class CompareResponse(BaseModel):
 
 
 class LaplaceResponse(BaseModel):
-    """Resultados del análisis de Laplace."""
+    """Resultados del análisis de Laplace"""
     material_id: str
     material_nombre: str
     tau_minutos: float
@@ -161,7 +155,7 @@ class LaplaceResponse(BaseModel):
 
 
 class WeatherResponse(BaseModel):
-    """Datos del clima actual."""
+    """Datos del clima actual"""
     temp: float
     feels_like: float
     temp_min: float
@@ -178,6 +172,6 @@ class WeatherResponse(BaseModel):
 
 
 class ErrorResponse(BaseModel):
-    """Respuesta de error estándar."""
+    """Respuesta de error estándar"""
     detail: str
     code: str = "error"

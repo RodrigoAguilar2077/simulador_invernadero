@@ -58,9 +58,9 @@ DEFAULT_LON = float(os.getenv("DEFAULT_LON", "-97.8948"))
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ============================================================
+
 # Crear aplicación FastAPI
-# ============================================================
+
 
 app = FastAPI(
     title="Simulador de Invernadero API",
@@ -72,7 +72,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS para desarrollo local (Vue en puerto 5173)
+#desarrollo local (puerto 5173)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -82,9 +82,7 @@ app.add_middleware(
 )
 
 
-# ============================================================
 # Endpoints
-# ============================================================
 
 @app.get("/api/materials")
 async def listar_materiales():
@@ -98,9 +96,6 @@ async def listar_materiales():
 async def simular(req: SimulationRequest):
     """
     Ejecuta una simulación térmica de invernadero para un material.
-    
-    Recibe los parámetros de la simulación y retorna los arrays de
-    temperatura interior/exterior y radiación para cada minuto.
     """
     # Validar material
     if req.material_id not in MATERIALES:
@@ -152,9 +147,7 @@ async def simular(req: SimulationRequest):
 async def simular_comparacion(req: CompareRequest):
     """
     Ejecuta simulaciones térmicas comparativas para múltiples materiales.
-    
-    Todos los materiales se simulan con las mismas condiciones climáticas
-    para una comparación justa.
+
     """
     # Validar materiales
     for mat_id in req.material_ids:
@@ -212,8 +205,6 @@ async def analisis_laplace(req: LaplaceRequest):
     """
     Realiza el análisis de Laplace del invernadero para un material dado.
     
-    Calcula la función de transferencia H(s) = k/(s+k), la constante de tiempo τ,
-    el polo del sistema, y genera la respuesta al escalón unitario.
     """
     if req.material_id not in MATERIALES:
         raise HTTPException(
@@ -243,12 +234,12 @@ async def clima_actual(
     lon: float = DEFAULT_LON,
 ):
     """
-    Obtiene los datos climáticos actuales desde OpenWeatherMap.
+    Obtiene los datos climáticos actuales desde OpenWeatherMap
     """
     if not API_KEY:
         raise HTTPException(
             status_code=500,
-            detail="API key de OpenWeatherMap no configurada.",
+            detail="API key de OpenWeatherMap no configurada",
         )
 
     try:
@@ -266,7 +257,7 @@ async def clima_actual(
 async def buscar_ciudades(q: str = "", limit: int = 5):
     """
     Busca ciudades usando la API de geocoding de OpenWeatherMap.
-    Retorna una lista de coincidencias con nombre, país, lat y lon.
+
     """
     if not API_KEY:
         raise HTTPException(
@@ -303,9 +294,9 @@ async def buscar_ciudades(q: str = "", limit: int = 5):
         )
 
 
-# ============================================================
+
 # Utilidades internas
-# ============================================================
+
 
 async def _obtener_datos_climaticos(
     usar_api: bool,
@@ -317,7 +308,7 @@ async def _obtener_datos_climaticos(
 ) -> tuple:
     """
     Obtiene datos de temperatura exterior y radiación solar.
-    Intenta usar la API de OpenWeatherMap; si falla, usa el fallback.
+    
     """
     T_ext = None
     nubosidad = 0.0
@@ -345,9 +336,9 @@ async def _obtener_datos_climaticos(
     )
 
 
-# ============================================================
+
 # Punto de entrada
-# ============================================================
+
 
 if __name__ == "__main__":
     import uvicorn

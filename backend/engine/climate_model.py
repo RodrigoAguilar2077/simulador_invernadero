@@ -1,14 +1,6 @@
 """
-Modelo climático para el simulador de invernadero.
+Modelo climático para el simulador de invernadero
 
-Integra la API de OpenWeatherMap para datos reales y proporciona
-un modelo sinusoidal como fallback cuando la API no está disponible.
-
-Funciones principales:
-- obtener_clima_openweather: Obtiene pronóstico real de 5 días/3h
-- interpolar_temperatura: Interpola datos de 3h a intervalos de 1 minuto
-- modelo_radiacion_solar: Radiación solar basada en posición geográfica
-- clima_fallback_tlaxcala: Modelo sinusoidal calibrado para la región
 """
 
 import math
@@ -18,9 +10,7 @@ import httpx
 from datetime import datetime, timezone
 
 
-# ============================================================
 # Integración con OpenWeatherMap API
-# ============================================================
 
 async def obtener_clima_openweather(
     lat: float,
@@ -28,7 +18,7 @@ async def obtener_clima_openweather(
     api_key: str,
 ) -> dict:
     """
-    Obtiene el pronóstico del clima desde OpenWeatherMap (5 day / 3 hour forecast).
+    Obtiene el pronóstico del clima desde OpenWeatherMap
     
     Endpoint: https://api.openweathermap.org/data/2.5/forecast
     
@@ -132,9 +122,7 @@ async def obtener_clima_actual(lat: float, lon: float, api_key: str) -> dict:
     }
 
 
-# ============================================================
 # Interpolación de datos climáticos
-# ============================================================
 
 def interpolar_temperatura(
     temperaturas_3h: list[float],
@@ -152,7 +140,7 @@ def interpolar_temperatura(
         Array NumPy de temperaturas interpoladas, un valor por minuto [°C]
     """
     n_puntos = len(temperaturas_3h)
-    # Puntos originales en minutos (cada 180 minutos = 3 horas)
+    # Puntos originales en minutos 
     x_original = np.arange(n_puntos) * 180.0
     y_original = np.array(temperaturas_3h)
 
@@ -173,9 +161,7 @@ def interpolar_temperatura(
     return y_interpolado
 
 
-# ============================================================
 # Modelo de radiación solar
-# ============================================================
 
 def modelo_radiacion_solar(
     n_minutos: int = 1440,
@@ -209,8 +195,8 @@ def modelo_radiacion_solar(
     radiacion = np.zeros(n_minutos)
     duracion_luz = hora_atardecer - hora_amanecer
 
-    # Factor de reducción por nubosidad (0% nubes = 100% radiación)
-    factor_nubes = 1.0 - (nubosidad_pct / 100.0) * 0.75  # Las nubes no bloquean todo
+    # Factor de reducción por nubosidad 
+    factor_nubes = 1.0 - (nubosidad_pct / 100.0) * 0.75
 
     for minuto in range(n_minutos):
         hora = minuto / 60.0
@@ -222,9 +208,7 @@ def modelo_radiacion_solar(
     return radiacion
 
 
-# ============================================================
 # Modelo climático fallback (sin API)
-# ============================================================
 
 def clima_fallback_tlaxcala(
     n_minutos: int = 1440,

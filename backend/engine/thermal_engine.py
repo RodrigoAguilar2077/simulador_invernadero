@@ -1,19 +1,6 @@
 """
 Motor térmico del simulador de invernadero.
 
-Implementa:
-1. Método de Euler Mejorado (Heun) para resolver la EDO de transferencia de calor.
-2. Análisis de Laplace para calcular la función de transferencia y constante de tiempo.
-
-La EDO base es la Ley de Enfriamiento de Newton con término de radiación solar:
-
-    dT/dt = k × (T_ext - T_int) + α × Radiación(t)
-
-Donde:
-    k     = Coeficiente de transferencia térmica [1/min]
-    α     = Factor de absorción de radiación solar [°C/(W/m²·min)]
-    T_ext = Temperatura exterior en el instante t [°C]
-    T_int = Temperatura interior en el instante t [°C]
 """
 
 import numpy as np
@@ -22,17 +9,11 @@ from scipy import signal
 
 class ThermalEngine:
     """
-    Motor de simulación térmica para invernaderos.
-    
-    Resuelve la ecuación diferencial de transferencia de calor
-    usando el método de Euler Mejorado (Heun) y proporciona
-    análisis de Laplace de la función de transferencia.
+    Motor de simulación térmica para invernaderos
     """
 
     def __init__(self, k: float, alpha: float = 0.005):
         """
-        Inicializa el motor térmico.
-        
         Args:
             k: Constante de transferencia térmica [1/min].
                Valores típicos: 0.007 (policarbonato 10mm) a 0.018 (polietileno LDPE).

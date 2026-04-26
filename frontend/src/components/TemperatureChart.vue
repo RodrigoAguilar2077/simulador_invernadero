@@ -2,7 +2,7 @@
   <div class="chart-container">
     <div class="chart-header">
       <h3 class="section-title">
-        <span class="section-title__icon">📈</span>
+        <span class="section-title__icon"><LineChartIcon size="24" /></span>
         Simulación Térmica
       </h3>
       <div class="chart-legend" v-if="hasData">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="chart-placeholder" v-else>
-      <div class="placeholder-icon">🌡️</div>
+      <div class="placeholder-icon"><Thermometer size="48" stroke-width="1.5" /></div>
       <p class="placeholder-text">
         Selecciona materiales y presiona <strong>Simular</strong> para ver la curva térmica
       </p>
@@ -64,6 +64,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Line } from 'vue-chartjs'
+import { LineChart as LineChartIcon, Thermometer } from 'lucide-vue-next'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -252,6 +253,8 @@ function hexToRgba(hex, alpha) {
   flex: 1;
   min-height: 350px;
   position: relative;
+  width: 100%;
+  min-width: 0;
 }
 
 .chart-placeholder {

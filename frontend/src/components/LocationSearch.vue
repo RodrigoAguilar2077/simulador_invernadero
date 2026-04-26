@@ -1,7 +1,7 @@
 <template>
   <div class="location-search">
     <h3 class="section-title">
-      <span class="section-title__icon">📍</span>
+      <span class="section-title__icon"><MapPin size="20" /></span>
       Ubicación
     </h3>
     <div class="search-wrapper">
@@ -13,7 +13,7 @@
         @input="onInput"
         @focus="showResults = true"
       />
-      <div class="search-icon">🔍</div>
+      <div class="search-icon"><Search size="16" /></div>
     </div>
 
     <div v-if="showResults && results.length > 0" class="search-results">
@@ -31,7 +31,7 @@
     </div>
 
     <div v-if="selectedCity" class="selected-city fade-in">
-      <span class="selected-city__pin">📍</span>
+      <span class="selected-city__pin"><MapPin size="14" /></span>
       <span class="selected-city__name">{{ selectedCity.name }}</span>
       <span class="selected-city__country">{{ selectedCity.country }}</span>
       <span class="selected-city__coords">
@@ -44,6 +44,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { searchCities } from '../services/api.js'
+import { MapPin, Search } from 'lucide-vue-next'
 
 const emit = defineEmits(['city-selected'])
 
