@@ -59,7 +59,7 @@ Esto permite calcular la **Constante de Tiempo (tau)**, que define la inercia t√
    # En Linux/Mac: source venv/bin/activate
    pip install -r requirements.txt
    ```
-   *Aseg√∫rate de crear un archivo `.env` en la carpeta `backend` con tu `OPENWEATHER_API_KEY=tu_clave_aqui`.*
+   
 
    Ejecuta el servidor:
    ```bash
