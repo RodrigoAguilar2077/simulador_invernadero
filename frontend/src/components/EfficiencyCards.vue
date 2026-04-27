@@ -1,7 +1,7 @@
 <template>
   <div class="efficiency-cards">
     <h3 class="section-title">
-      <span class="section-title__icon">⚡</span>
+      <span class="section-title__icon"></span>
       Eficiencia Energética
     </h3>
 
@@ -90,8 +90,15 @@ function retentionColor(sim) {
 
 <style scoped>
 .efficiency-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-md);
+}
+
+@media (max-width: 480px) {
+  .efficiency-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .efficiency-card { padding: var(--space-lg); }
 .efficiency-card__header {

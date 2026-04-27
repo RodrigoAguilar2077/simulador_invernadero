@@ -13,7 +13,7 @@
         <span class="weather-compact__desc">{{ weather.descripcion }}</span>
       </div>
       <div v-else-if="error" class="weather-compact weather-compact--error">
-        <span>⚠️ {{ error }}</span>
+        <span>{{ error }}</span>
       </div>
       <div v-else class="weather-compact">
         <div class="spinner" style="width:16px;height:16px"></div>
@@ -65,7 +65,7 @@
       </div>
 
       <div v-else-if="error" class="weather-error">
-        <p>⚠️ {{ error }}</p>
+        <p>{{ error }}</p>
       </div>
 
       <div v-else class="weather-loading">

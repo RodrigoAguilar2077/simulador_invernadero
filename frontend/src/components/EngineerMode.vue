@@ -2,7 +2,6 @@
   <div class="engineer-mode">
     <div class="engineer-mode__header" @click="toggle">
       <div class="engineer-mode__label">
-        <span>🔬</span>
         <span class="engineer-mode__title">Modo Ingeniero</span>
         <span class="engineer-mode__hint">{{ active ? 'Ocultar detalles' : 'Ver ecuaciones y método' }}</span>
       </div>
@@ -62,7 +61,7 @@
         </div>
 
         <div v-if="laplaceData" class="engineer-mode__results glass-card fade-in">
-          <h4 class="engineer-mode__results-title">📊 Resultados del Análisis — {{ laplaceData.material_nombre }}</h4>
+          <h4 class="engineer-mode__results-title">Resultados del Análisis — {{ laplaceData.material_nombre }}</h4>
           <div class="engineer-mode__results-grid">
             <div class="engineer-mode__results-col">
               <div class="stat-row">

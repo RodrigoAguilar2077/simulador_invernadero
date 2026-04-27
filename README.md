@@ -1,4 +1,4 @@
-# 🌱 AgroTech: Simulador de Inercia Térmica para Invernaderos
+# AgroTech: Simulador de Inercia Térmica para Invernaderos
 
 ![Versión](https://img.shields.io/badge/Version-1.0.0-green)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
@@ -9,42 +9,69 @@ Este proyecto es una herramienta de ingeniería diseñada para modelar y predeci
 
 ---
 
-## 🚀 Características Principales
+## Características Principales
 
 - **Simulación en Tiempo Real:** Cálculo minuto a minuto de la temperatura interna basado en leyes físicas.
-- **Clima Dinámico:** Integración con la API de OpenWeatherMap para simular condiciones reales de cualquier ciudad del mundo.
-- **Análisis de Materiales:** Comparativa de eficiencia térmica entre Vidrio, Policarbonato y Polietileno.
-- **Interfaz Glassmorphism:** Diseño minimalista y moderno con enfoque en la experiencia de usuario (UX).
-- **Modo Ingeniero:** Visualización de las tripas matemáticas del simulador.
+- **Clima Dinámico y Geolocalización:** Integración con la API de OpenWeatherMap y la API de Geolocalización del navegador para simular condiciones reales automáticamente según tu ubicación.
+- **Análisis de Materiales:** Comparativa de eficiencia térmica entre diferentes cubiertas.
+- **Interfaz Glassmorphism:** Diseño minimalista, limpio y responsivo.
+- **Modo Ingeniero:** Visualización de la matemática detrás del simulador.
 
 ---
 
-## 🧠 Fundamentos Matemáticos
+## Fundamentos Matemáticos
 
-El simulador no es solo visual; corre sobre un motor de cálculo robusto:
+El simulador se basa en un motor de cálculo robusto:
 
 ### 1. Método de Euler Mejorado (Heun)
-Para resolver la Ecuación Diferencial Ordinaria (EDO) de transferencia de calor, implementamos el algoritmo de **Heun**. A diferencia del Euler simple, este utiliza un predictor y un corrector para reducir el error de truncamiento, asegurando que la curva de temperatura sea estable y precisa.
+Para resolver la Ecuación Diferencial Ordinaria (EDO) de transferencia de calor, implementamos el algoritmo de **Heun**. Utiliza un predictor y un corrector para reducir el error de truncamiento, asegurando que la curva de temperatura sea estable.
 
 ### 2. Análisis de Laplace
-Aplicamos la **Transformada de Laplace** para obtener la Función de Transferencia $H(s)$ del sistema:
-$$H(s) = \frac{k}{s + k}$$
-Esto nos permite calcular la **Constante de Tiempo ($\tau$)**, que define la inercia térmica del invernadero. Un sistema con una $\tau$ alta es más estable frente a heladas repentinas.
+Aplicamos la **Transformada de Laplace** para obtener la Función de Transferencia H(s) del sistema:
+H(s) = k / (s + k)
+
+Esto permite calcular la **Constante de Tiempo (tau)**, que define la inercia térmica del invernadero. Un sistema con una constante alta es más estable frente a cambios de temperatura.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
-* **Frontend:** Vue.js 3 + Vite + Tailwind CSS (Estética Glassmorphism).
-* **Backend:** FastAPI (Python) para el procesamiento de alta velocidad de los algoritmos.
-* **Matemáticas:** NumPy para álgebra lineal y manejo de vectores térmicos.
-* **Datos:** API de OpenWeatherMap para geolocalización y clima.
+* **Frontend:** Vue.js 3 + CSS Nativo (Estética Glassmorphism).
+* **Backend:** FastAPI (Python) para el procesamiento rápido de cálculos.
+* **Matemáticas:** NumPy y SciPy para análisis térmicos.
+* **Datos:** API de OpenWeatherMap.
 
 ---
 
-## 📦 Instalación y Uso
+## Instalación y Uso
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/RodrigoAguilar2077/simulador_invernadero](https://github.com/RodrigoAguilar2077/simulador_invernadero)
+   git clone https://github.com/RodrigoAguilar2077/simulador_invernadero
    cd simulador_invernadero
+   ```
+
+2. **Configurar Backend:**
+   ```bash
+   cd backend
+   python -m venv venv
+   # En Windows: venv\Scripts\activate
+   # En Linux/Mac: source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+   *Asegúrate de crear un archivo `.env` en la carpeta `backend` con tu `OPENWEATHER_API_KEY=tu_clave_aqui`.*
+
+   Ejecuta el servidor:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+3. **Configurar Frontend:**
+   ```bash
+   cd ../frontend
+   npm install
+   npm run dev
+   ```
+
+4. **Acceder a la Aplicación:**
+   Abre tu navegador en `http://localhost:5173` y acepta los permisos de ubicación para cargar tu clima local.

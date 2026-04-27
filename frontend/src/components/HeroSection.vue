@@ -52,7 +52,7 @@
     </div>
 
     <button class="btn btn--primary hero__cta" @click="$emit('scroll-to-simulator')">
-      ▶ Comenzar Simulación
+      Comenzar Simulación
     </button>
   </section>
 </template>

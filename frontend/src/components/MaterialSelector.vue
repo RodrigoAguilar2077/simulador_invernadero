@@ -1,7 +1,7 @@
 <template>
   <div class="material-selector">
     <h3 class="section-title">
-      <span class="section-title__icon">🧪</span>
+      <span class="section-title__icon"></span>
       Materiales
     </h3>
     <div class="material-list">
@@ -24,7 +24,7 @@
 
     <div class="dimension-controls">
       <h3 class="section-title" style="margin-top: var(--space-lg);">
-        <span class="section-title__icon">📐</span>
+        <span class="section-title__icon"></span>
         Dimensiones
       </h3>
 
@@ -100,7 +100,6 @@
       @click="$emit('simulate')"
     >
       <span v-if="loading" class="spinner"></span>
-      <span v-else>▶</span>
       {{ loading ? 'Simulando...' : 'Simular' }}
     </button>
   </div>

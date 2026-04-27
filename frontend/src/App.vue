@@ -1,38 +1,14 @@
 <template>
   <div id="app-root" :style="appStyle">
-    <!-- SIDEBAR NAV -->
-    <nav class="sidebar-nav" :class="{ 'open': sidebarOpen }">
-      <div class="sidebar-nav__logo">
-        <div class="sidebar-nav__brand">🌿 Simulador de Invernadero</div>
-        <div class="sidebar-nav__slogan">AgroTech: Smart Simulation</div>
-      </div>
-      <div class="sidebar-nav__links">
-        <a
-          v-for="s in sections" :key="s.id"
-          class="sidebar-nav__link"
-          :class="{ 'sidebar-nav__link--active': activeSection === s.id }"
-          @click="scrollTo(s.id)"
-        >
-          <span class="sidebar-nav__link-icon">{{ s.icon }}</span>
-          {{ s.label }}
-        </a>
-      </div>
-      <div class="sidebar-nav__footer">
-        <div class="top-header__badge">
-          <span class="badge-dot"></span>
-          {{ connectionStatus }}
-        </div>
-      </div>
-    </nav>
-
     <!-- MAIN CONTENT -->
     <div class="main-content">
       <!-- TOP HEADER -->
       <header class="top-header">
         <div class="top-header__left">
-          <button class="hamburger-btn" @click="toggleSidebar">
-            <MenuIcon class="hamburger-icon" />
-          </button>
+          <div class="top-header__badge">
+            <span class="badge-dot"></span>
+            {{ connectionStatus }}
+          </div>
           <WeatherInfo :weather="weatherData" :error="weatherError" compact />
         </div>
       </header>
@@ -86,7 +62,6 @@
     <!-- Error Toast -->
     <Transition name="toast">
       <div v-if="errorMessage" class="error-toast glass-card" @click="errorMessage = ''">
-        <span>⚠️</span>
         <span>{{ errorMessage }}</span>
         <span class="toast-close">✕</span>
       </div>
@@ -103,7 +78,6 @@ import TemperatureChart from './components/TemperatureChart.vue'
 import WeatherInfo from './components/WeatherInfo.vue'
 import EfficiencyCards from './components/EfficiencyCards.vue'
 import EngineerMode from './components/EngineerMode.vue'
-import { Menu as MenuIcon } from 'lucide-vue-next'
 import {
   fetchMaterials,
   compareSimulation,
@@ -124,8 +98,6 @@ const weatherData = ref(null)
 const weatherError = ref('')
 const errorMessage = ref('')
 const connectionStatus = ref('Conectando...')
-const activeSection = ref('section-intro')
-const sidebarOpen = ref(false)
 
 const appStyle = computed(() => {
   const baseTemp = weatherData.value ? weatherData.value.temp : 20;
@@ -158,42 +130,9 @@ const dimensions = reactive({
   horas: 24,
 })
 
-const sections = [
-  { id: 'section-intro', icon: '📖', label: 'Introducción' },
-  { id: 'section-simulator', icon: '🔬', label: 'Simulador' },
-  { id: 'section-engineer', icon: '⚙️', label: 'Modo Ingeniero' },
-]
-
-
-// Intersection Observer for active section tracking
-
-
-let observer = null
-
 onMounted(() => {
   loadInitialData()
-
-  observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          activeSection.value = entry.target.id
-        }
-      }
-    },
-    { threshold: 0.3 }
-  )
-
-  sections.forEach((s) => {
-    const el = document.getElementById(s.id)
-    if (el) observer.observe(el)
-  })
 })
-
-onUnmounted(() => {
-  if (observer) observer.disconnect()
-})
-
 
 // Methods
 
@@ -201,11 +140,6 @@ onUnmounted(() => {
 function scrollTo(id) {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  sidebarOpen.value = false // Close sidebar on mobile after clicking
-}
-
-function toggleSidebar() {
-  sidebarOpen.value = !sidebarOpen.value
 }
 
 function onCitySelected({ lat, lon }) {
@@ -276,7 +210,21 @@ async function loadInitialData() {
     materials.value = mats
     connectionStatus.value = 'API Conectada'
 
-    await loadWeather(selectedCoords.lat, selectedCoords.lon)
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          selectedCoords.lat = position.coords.latitude
+          selectedCoords.lon = position.coords.longitude
+          await loadWeather(selectedCoords.lat, selectedCoords.lon)
+        },
+        async (error) => {
+          console.warn('Geolocation error or denied:', error)
+          await loadWeather(selectedCoords.lat, selectedCoords.lon)
+        }
+      )
+    } else {
+      await loadWeather(selectedCoords.lat, selectedCoords.lon)
+    }
   } catch (err) {
     connectionStatus.value = 'Sin conexión'
     errorMessage.value = 'No se puede conectar con el backend. ¿Está corriendo uvicorn?'
@@ -316,36 +264,14 @@ async function loadInitialData() {
 .toast-enter-active, .toast-leave-active { transition: all 0.3s ease; }
 .toast-enter-from, .toast-leave-to { opacity: 0; transform: translateX(-50%) translateY(20px); }
 
-/* Hamburger Button */
-.hamburger-btn {
-  display: none;
-  background: transparent;
-  border: none;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  padding: var(--space-xs);
-  border-radius: var(--radius-sm);
-  transition: background var(--transition-fast);
-}
-.hamburger-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-.hamburger-icon {
-  width: 24px;
-  height: 24px;
-}
-
 #app-root {
+  flex: 1;
+  width: 100%;
   min-height: 100vh;
   transition: background 1s ease-in-out;
 }
 
 @media (max-width: 768px) {
-  .hamburger-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   .simulator-sidebar {
     position: static;
   }
