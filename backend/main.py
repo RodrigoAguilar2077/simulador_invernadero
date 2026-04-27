@@ -72,10 +72,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
-#desarrollo local (puerto 5173)
+# Configuración CORS para producción y desarrollo
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[FRONTEND_URL] if FRONTEND_URL != "*" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

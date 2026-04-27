@@ -3,7 +3,7 @@
  * Base URL: http://localhost:8000/api
  */
 
-const BASE_URL = 'http://localhost:8000/api'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
 /**
  * Wrapper genérico para peticiones fetch con manejo de errores.

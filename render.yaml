@@ -1,0 +1,26 @@
+services:
+  # Backend (FastAPI Web Service)
+  - type: web
+    name: simulador-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: OPENWEATHER_API_KEY
+        sync: false # Debes ingresar este valor manualmente en el dashboard de Render
+      - key: PYTHON_VERSION
+        value: 3.12.0
+
+  # Frontend (Vue Static Site)
+  - type: web
+    name: simulador-frontend
+    env: static
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: simulador-backend
+          envVarKey: RENDER_EXTERNAL_URL
+          property: connectionString
